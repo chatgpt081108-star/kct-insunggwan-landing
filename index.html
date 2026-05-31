@@ -1,0 +1,858 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KCT 인성관 | 한 사람을 소중히 하는 인성교육 학원</title>
+  <meta name="description" content="한 사람을 소중히 하는 초중 중심의 대한민국 최초 인성교육 학원, KCT 인성관. 즐겁게 오래 다니는 학습 공동체를 소개합니다.">
+  <style>
+    :root {
+      --ink: #18212a;
+      --muted: #5d6671;
+      --paper: #fffaf2;
+      --cream: #f6efe2;
+      --coral: #df765f;
+      --sage: #78997d;
+      --sky: #6ea9c9;
+      --sun: #f2bf5e;
+      --line: rgba(24, 33, 42, .14);
+      --shadow: 0 22px 60px rgba(24, 33, 42, .13);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Pretendard", "Noto Sans KR", "Apple SD Gothic Neo", system-ui, sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      letter-spacing: 0;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 18px clamp(18px, 5vw, 64px);
+      background: rgba(255, 250, 242, .88);
+      border-bottom: 1px solid rgba(255, 255, 255, .5);
+      backdrop-filter: blur(14px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      border-radius: 8px;
+      color: #fff;
+      background: var(--ink);
+      font-size: 13px;
+      letter-spacing: 0;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: clamp(12px, 2.4vw, 28px);
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .phone-pill {
+      padding: 10px 14px;
+      border-radius: 999px;
+      color: #fff;
+      background: var(--coral);
+    }
+
+    .hero {
+      min-height: 94svh;
+      display: grid;
+      align-items: end;
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      padding: 118px clamp(18px, 5vw, 72px) clamp(34px, 7vw, 72px);
+      background-image:
+        linear-gradient(120deg, rgba(24, 33, 42, .88), rgba(68, 110, 112, .76) 48%, rgba(223, 118, 95, .62)), radial-gradient(circle at 84% 22%, rgba(242, 191, 94, .62), transparent 28%), radial-gradient(circle at 72% 78%, rgba(110, 169, 201, .55), transparent 30%);
+      background-size: cover;
+      background-position: center;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 120px;
+      background: linear-gradient(180deg, rgba(255, 250, 242, 0), var(--paper));
+      z-index: -1;
+    }
+
+    .hero-content {
+      width: min(850px, 100%);
+      color: #fff;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 22px;
+      font-size: clamp(14px, 2.4vw, 17px);
+      font-weight: 800;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 38px;
+      height: 2px;
+      background: var(--sun);
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 760px;
+      font-size: clamp(48px, 9vw, 112px);
+      line-height: .92;
+      letter-spacing: 0;
+      text-wrap: balance;
+    }
+
+    .hero-copy {
+      max-width: 620px;
+      margin: 28px 0 0;
+      color: rgba(255, 255, 255, .92);
+      font-size: clamp(18px, 2.4vw, 24px);
+      line-height: 1.65;
+      font-weight: 650;
+      text-wrap: balance;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 18px;
+      border-radius: 999px;
+      font-weight: 900;
+      border: 1px solid rgba(255, 255, 255, .34);
+      background: rgba(255, 255, 255, .16);
+      color: #fff;
+      backdrop-filter: blur(10px);
+    }
+
+    .btn.primary {
+      border-color: var(--sun);
+      background: var(--sun);
+      color: var(--ink);
+    }
+
+    .section {
+      padding: clamp(72px, 10vw, 132px) clamp(18px, 5vw, 72px);
+    }
+
+    .section.alt {
+      background: #eef5f2;
+    }
+
+    .wrap {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, .82fr) minmax(260px, .48fr);
+      gap: 42px;
+      align-items: end;
+      margin-bottom: 42px;
+    }
+
+    .kicker {
+      margin: 0 0 12px;
+      color: var(--coral);
+      font-size: 15px;
+      font-weight: 950;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(32px, 5vw, 64px);
+      line-height: 1.08;
+      letter-spacing: 0;
+      text-wrap: balance;
+    }
+
+    .lead {
+      margin: 0;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.78;
+      font-weight: 650;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .feature {
+      min-height: 210px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .62);
+      box-shadow: 0 16px 34px rgba(24, 33, 42, .05);
+    }
+
+    .feature strong {
+      display: block;
+      margin-bottom: 14px;
+      font-size: 24px;
+      line-height: 1.25;
+    }
+
+    .feature p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.72;
+      font-weight: 600;
+    }
+
+    .story-band {
+      display: grid;
+      grid-template-columns: minmax(0, .86fr) minmax(280px, .54fr);
+      gap: clamp(28px, 5vw, 68px);
+      align-items: center;
+    }
+
+    .quote {
+      position: relative;
+      padding: clamp(28px, 5vw, 52px);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: var(--shadow);
+      transform: rotate(-1deg);
+    }
+
+    .quote::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border: 1px dashed rgba(24, 33, 42, .16);
+      border-radius: 6px;
+      pointer-events: none;
+    }
+
+    .quote p {
+      position: relative;
+      margin: 0;
+      font-size: clamp(28px, 5vw, 54px);
+      line-height: 1.22;
+      font-weight: 950;
+      text-wrap: balance;
+    }
+
+    .quote span {
+      display: block;
+      position: relative;
+      margin-top: 20px;
+      color: var(--muted);
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .story-copy {
+      color: var(--muted);
+      font-size: 19px;
+      line-height: 1.9;
+      font-weight: 650;
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      counter-reset: step;
+    }
+
+    .step {
+      min-height: 245px;
+      padding: 26px;
+      border-radius: 8px;
+      background: #fff;
+      border-top: 8px solid var(--sky);
+      box-shadow: 0 18px 38px rgba(24, 33, 42, .08);
+      counter-increment: step;
+    }
+
+    .step:nth-child(2) {
+      border-top-color: var(--sage);
+    }
+
+    .step:nth-child(3) {
+      border-top-color: var(--coral);
+    }
+
+    .step::before {
+      content: "0" counter(step);
+      display: block;
+      margin-bottom: 30px;
+      color: rgba(24, 33, 42, .24);
+      font-size: 42px;
+      font-weight: 950;
+    }
+
+    .step h3 {
+      margin: 0 0 12px;
+      font-size: 25px;
+      line-height: 1.2;
+    }
+
+    .step p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-weight: 650;
+    }
+
+    .collage {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .big-note,
+    .small-note {
+      border-radius: 8px;
+      padding: clamp(24px, 4vw, 42px);
+      min-height: 250px;
+      color: #fff;
+      overflow: hidden;
+      position: relative;
+      isolation: isolate;
+    }
+
+    .big-note {
+      background: var(--ink);
+    }
+
+    .small-note {
+      display: grid;
+      align-content: end;
+      background: var(--coral);
+    }
+
+    .big-note::after,
+    .small-note::after {
+      content: "";
+      position: absolute;
+      right: -40px;
+      bottom: -40px;
+      width: 180px;
+      height: 180px;
+      border: 24px solid rgba(255, 255, 255, .16);
+      border-radius: 50%;
+      z-index: -1;
+    }
+
+    .big-note h2,
+    .small-note h3 {
+      max-width: 710px;
+      margin: 0;
+      color: #fff;
+    }
+
+    .big-note p,
+    .small-note p {
+      max-width: 700px;
+      margin: 20px 0 0;
+      color: rgba(255, 255, 255, .82);
+      font-size: 18px;
+      line-height: 1.74;
+      font-weight: 650;
+    }
+
+    .small-note h3 {
+      font-size: clamp(26px, 4vw, 42px);
+      line-height: 1.12;
+    }
+
+    .contact {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 28px;
+      align-items: center;
+      padding: clamp(28px, 5vw, 50px);
+      border-radius: 8px;
+      color: #fff;
+      background: linear-gradient(110deg, var(--sage), #446e70);
+    }
+
+    .contact h2 {
+      font-size: clamp(30px, 5vw, 58px);
+      color: #fff;
+    }
+
+    .contact p {
+      margin: 16px 0 0;
+      color: rgba(255, 255, 255, .82);
+      font-size: 18px;
+      line-height: 1.7;
+      font-weight: 650;
+    }
+
+    .contact-actions {
+      display: grid;
+      gap: 10px;
+      min-width: min(300px, 100%);
+    }
+
+    .contact-actions a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      padding: 0 18px;
+      border-radius: 999px;
+      background: #fff;
+      color: var(--ink);
+      font-weight: 950;
+    }
+
+    .apply-wrap {
+      display: grid;
+      grid-template-columns: minmax(0, .82fr) minmax(320px, .56fr);
+      gap: clamp(26px, 5vw, 64px);
+      align-items: start;
+    }
+
+    .apply-copy {
+      padding-top: 12px;
+    }
+
+    .apply-form {
+      display: grid;
+      gap: 18px;
+      padding: clamp(24px, 4vw, 36px);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .field label,
+    .subject-label {
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    input,
+    select {
+      width: 100%;
+      min-height: 50px;
+      border: 1px solid rgba(24, 33, 42, .2);
+      border-radius: 8px;
+      padding: 0 14px;
+      color: var(--ink);
+      background: #fffaf2;
+      font: inherit;
+      font-weight: 700;
+    }
+
+    input:focus,
+    select:focus {
+      outline: 3px solid rgba(110, 169, 201, .28);
+      border-color: var(--sky);
+    }
+
+    .subjects {
+      display: grid;
+      gap: 10px;
+      border: 0;
+      padding: 0;
+      margin: 0;
+    }
+
+    .subject-options {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .subject-options label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 0 12px;
+      border: 1px solid rgba(24, 33, 42, .14);
+      border-radius: 8px;
+      background: #f7f2e9;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .subject-options input {
+      width: 18px;
+      min-height: 18px;
+      accent-color: var(--coral);
+    }
+
+    .submit-btn {
+      min-height: 54px;
+      border: 0;
+      border-radius: 999px;
+      color: #fff;
+      background: var(--ink);
+      font: inherit;
+      font-weight: 950;
+      cursor: pointer;
+    }
+
+    .form-note {
+      margin: -4px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+      font-weight: 650;
+    }
+
+    .form-status {
+      min-height: 22px;
+      margin: 0;
+      color: var(--sage);
+      font-size: 14px;
+      line-height: 1.55;
+      font-weight: 850;
+    }
+
+    footer {
+      padding: 28px clamp(18px, 5vw, 72px) 46px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    footer .wrap {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      border-top: 1px solid var(--line);
+      padding-top: 22px;
+    }
+
+    @media (max-width: 900px) {
+      nav {
+        display: none;
+      }
+
+      .section-head,
+      .story-band,
+      .collage,
+      .apply-wrap,
+      .contact {
+        grid-template-columns: 1fr;
+      }
+
+      .feature-grid,
+      .timeline {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .hero {
+        min-height: 88svh;
+        background-position: 62% center;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .topbar {
+        padding: 14px 16px;
+      }
+
+      .brand {
+        font-size: 15px;
+      }
+
+      .hero {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .hero-actions,
+      footer .wrap {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .feature-grid,
+      .timeline,
+      .subject-options {
+        grid-template-columns: 1fr;
+      }
+
+      .feature,
+      .step {
+        min-height: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="KCT 인성관 홈">
+      <span class="brand-mark">KCT</span>
+      <span>KCT 인성관</span>
+    </a>
+    <nav aria-label="주요 메뉴">
+      <a href="#philosophy">철학</a>
+      <a href="#routine">학습 방식</a>
+      <a href="#story">학생 이야기</a>
+      <a href="#apply">상담 신청</a>
+      <a href="tel:02-379-7161" class="phone-pill">02-379-7161</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-content">
+        <p class="eyebrow">한 사람을 소중히 하는 초중 중심 인성교육 학원</p>
+        <h1 id="hero-title">KCT 인성관</h1>
+        <p class="hero-copy">공부가 아이의 마음을 닫지 않도록, 시험도 경험이 되고 학원도 즐거운 곳이 되도록. KCT 인성관은 오래 머물고 싶은 배움의 관계를 만듭니다.</p>
+        <div class="hero-actions" aria-label="문의 링크">
+          <a class="btn primary" href="tel:02-379-7161">전화 상담하기</a>
+          <a class="btn" href="https://www.instagram.com/kct_edu/" target="_blank" rel="noopener">인스타그램 보기</a>
+          <a class="btn" href="https://blog.naver.com/meluv" target="_blank" rel="noopener">블로그 보기</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="philosophy">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="kicker">WHY KCT</p>
+            <h2>처음 온 아이도, 오래 다닌 아이도 한 사람으로 봅니다.</h2>
+          </div>
+          <p class="lead">KCT 인성관은 성적 이전에 아이의 마음과 생활 태도를 함께 살피는 대한민국 최초의 인성교육 학원입니다. 초중 학생들이 안정적으로 배우고 꾸준히 성장하도록 관계의 힘을 믿습니다.</p>
+        </div>
+        <div class="feature-grid" aria-label="KCT 인성관 특징">
+          <article class="feature">
+            <strong>인성교육</strong>
+            <p>공부 습관과 마음가짐을 함께 세워 아이가 자기 삶을 긍정적으로 바라보도록 돕습니다.</p>
+          </article>
+          <article class="feature">
+            <strong>초중 중심</strong>
+            <p>기초가 만들어지는 시기에 맞춰 학습 리듬, 생활 루틴, 관계 감각을 균형 있게 봅니다.</p>
+          </article>
+          <article class="feature">
+            <strong>즐거운 등원</strong>
+            <p>학원이 부담만 되는 공간이 아니라 친구, 선생님, 경험이 기다려지는 곳이 되도록 운영합니다.</p>
+          </article>
+          <article class="feature">
+            <strong>오래 가는 관계</strong>
+            <p>한번 다니면 꾸준히 이어지는 이유는 아이가 존중받는다고 느끼는 시간에 있습니다.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt" id="story">
+      <div class="wrap story-band">
+        <div class="quote" aria-label="학생 편지 문구">
+          <p>“6년 다녔고, 앞으로 6년을 더 다닐래요.”</p>
+          <span>KCT 인성관을 오래 기억한 학생의 마음</span>
+        </div>
+        <div class="story-copy">
+          <p>아이들은 자신을 알아봐 주는 공간을 오래 기억합니다. KCT 인성관은 한 번의 성적표보다 한 아이의 긴 시간을 더 소중하게 보고, 배움이 관계 안에서 자라도록 곁을 지킵니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="routine">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="kicker">MONTHLY RHYTHM</p>
+            <h2>월말평가도 스트레스가 아니라 성장의 기록으로.</h2>
+          </div>
+          <p class="lead">매달 월말평가를 보되, 평가가 아이를 조급하게 만들지 않도록 쿠킹클래스와 함께합니다. 긴장과 즐거움이 균형을 이루면 아이들은 더 편안하게 도전합니다.</p>
+        </div>
+        <div class="timeline">
+          <article class="step">
+            <h3>배움 확인</h3>
+            <p>한 달 동안 익힌 내용을 차분히 점검하며 아이에게 필요한 다음 단계를 찾습니다.</p>
+          </article>
+          <article class="step">
+            <h3>마음 환기</h3>
+            <p>평가가 끝이 아니라 과정임을 느끼도록, 쿠킹클래스로 밝은 분위기를 이어갑니다.</p>
+          </article>
+          <article class="step">
+            <h3>꾸준한 성장</h3>
+            <p>결과보다 지속성을 중시하며 아이가 다시 해볼 용기를 갖게 합니다.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt">
+      <div class="wrap collage">
+        <div class="big-note">
+          <p class="kicker">KCT MOTTO</p>
+          <h2>학원 가는 날이 싫지 않은 아이, 그 마음에서 공부가 시작됩니다.</h2>
+          <p>즐겁게 다니는 분위기 안에서 예의, 책임감, 배려, 집중력까지 함께 자랍니다. KCT 인성관은 아이가 배움의 시간을 자기 것으로 받아들이는 학원을 지향합니다.</p>
+        </div>
+        <div class="small-note">
+          <h3>상담은 편하게 연락 주세요.</h3>
+          <p>초중 학습과 인성교육을 함께 고민하는 가정이라면 KCT 인성관의 방향을 만나보세요.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="apply">
+      <div class="wrap apply-wrap">
+        <div class="apply-copy">
+          <p class="kicker">CONSULTATION</p>
+          <h2>상담 신청하기</h2>
+          <p class="lead">아이의 학년과 이름, 관심 수강과목을 남겨 주세요. 입력한 내용은 상담 메모로 정리되어 전화 연결 전에 바로 확인할 수 있습니다.</p>
+        </div>
+        <form class="apply-form" id="consultForm">
+          <div class="field">
+            <label for="grade">학년</label>
+            <select id="grade" name="학년" required>
+              <option value="">학년을 선택해 주세요</option>
+              <option>초등 1학년</option>
+              <option>초등 2학년</option>
+              <option>초등 3학년</option>
+              <option>초등 4학년</option>
+              <option>초등 5학년</option>
+              <option>초등 6학년</option>
+              <option>중등 1학년</option>
+              <option>중등 2학년</option>
+              <option>중등 3학년</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="studentName">이름</label>
+            <input id="studentName" name="이름" type="text" autocomplete="name" placeholder="학생 이름" required>
+          </div>
+          <fieldset class="subjects">
+            <legend class="subject-label">수강과목</legend>
+            <div class="subject-options">
+              <label><input type="checkbox" name="수강과목" value="국어"> 국어</label>
+              <label><input type="checkbox" name="수강과목" value="영어"> 영어</label>
+              <label><input type="checkbox" name="수강과목" value="수학"> 수학</label>
+              <label><input type="checkbox" name="수강과목" value="과학"> 과학</label>
+              <label><input type="checkbox" name="수강과목" value="사회"> 사회</label>
+              <label><input type="checkbox" name="수강과목" value="인성교육"> 인성교육</label>
+            </div>
+          </fieldset>
+          <button class="submit-btn" type="submit">상담 신청하기</button>
+          <p class="form-note">신청 내용은 기기에 복사되고, 바로 전화 상담으로 연결됩니다.</p>
+          <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="wrap contact">
+        <div>
+          <h2>KCT 인성관 상담 안내</h2>
+          <p>전화 02-379-7161 · 인스타그램 kct_edu · 블로그 meluv</p>
+        </div>
+        <div class="contact-actions" aria-label="상담 채널">
+          <a href="tel:02-379-7161">02-379-7161 전화하기</a>
+          <a href="https://www.instagram.com/kct_edu/" target="_blank" rel="noopener">@kct_edu 방문하기</a>
+          <a href="https://blog.naver.com/meluv" target="_blank" rel="noopener">네이버 블로그 보기</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>KCT 인성관</span>
+      <span>한 사람을 소중히 하는 초중 중심 인성교육 학원</span>
+    </div>
+  </footer>
+  <script>
+    const consultForm = document.querySelector("#consultForm");
+    const formStatus = document.querySelector("#formStatus");
+
+    consultForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const grade = consultForm.querySelector("#grade").value;
+      const name = consultForm.querySelector("#studentName").value.trim();
+      const subjects = [...consultForm.querySelectorAll("input[name='수강과목']:checked")]
+        .map((input) => input.value);
+
+      if (!subjects.length) {
+        formStatus.textContent = "수강과목을 하나 이상 선택해 주세요.";
+        return;
+      }
+
+      const memo = `KCT 인성관 상담 신청\n학년: ${grade}\n이름: ${name}\n수강과목: ${subjects.join(", ")}`;
+
+      try {
+        await navigator.clipboard.writeText(memo);
+        formStatus.textContent = "상담 신청 내용이 복사되었습니다. 전화로 연결합니다.";
+      } catch (error) {
+        formStatus.textContent = "상담 신청 내용을 확인했습니다. 전화로 연결합니다.";
+      }
+
+      window.setTimeout(() => {
+        window.location.href = "tel:02-379-7161";
+      }, 700);
+    });
+  </script>
+</body>
+</html>
+
