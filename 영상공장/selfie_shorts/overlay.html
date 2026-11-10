@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>셀카 쇼츠 오버레이</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@500;700;900&family=Nanum+Myeongjo:wght@800&display=block">
+<style>
+:root{--gold:#c9a96c;--gold2:#e2c98c;--ink:#16151b;--bg:#121117}
+*{box-sizing:border-box;margin:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:transparent;font-family:"Noto Sans KR",sans-serif}
+.chip{position:absolute;left:50px;top:70px;display:flex;align-items:center;gap:14px;padding:12px 26px 12px 14px;border-radius:999px;background:rgba(18,17,23,.78);border:2px solid rgba(201,169,108,.6);color:#f3f0e9;font-size:34px;font-weight:700}
+.chip img{width:56px;height:52px;object-fit:contain}.chip b{color:var(--gold2)}
+.card{position:absolute;left:50%;top:1240px;transform:translate(-50%,0);background:#fff;color:var(--ink);border-radius:30px;padding:30px 50px;
+ font-family:"Black Han Sans",sans-serif;font-size:84px;line-height:1.2;text-align:center;white-space:nowrap;box-shadow:0 18px 50px rgba(0,0,0,.35);border-bottom:10px solid var(--gold)}
+.card em{font-style:normal;color:#a8823f}
+.pic{position:absolute;left:50%;top:1010px;width:400px;transform:translate(-50%,0);border-radius:26px;overflow:hidden;border:8px solid #fff;box-shadow:0 20px 60px rgba(0,0,0,.45)}
+.pic img{display:block;width:100%}
+.sub{position:absolute;left:60px;right:60px;top:1640px;text-align:center}
+.sub span{display:inline-block;color:#fff;font-size:60px;font-weight:900;line-height:1.35;word-break:keep-all;-webkit-text-stroke:2px rgba(0,0,0,.55);paint-order:stroke fill;text-shadow:0 2px 10px rgba(0,0,0,.75),0 0 3px rgba(0,0,0,.9)}
+.sub em{font-style:normal;color:var(--gold2)}
+.end{position:absolute;inset:0;background:radial-gradient(900px 700px at 50% 30%,rgba(201,169,108,.18),transparent 70%),var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:34px;color:#f3f0e9}
+.end img{width:340px;height:318px;object-fit:contain}
+.end .t{font-family:"Nanum Myeongjo",serif;font-weight:800;font-size:66px;text-align:center;line-height:1.35}
+.end .t span{color:var(--gold2)}
+.end .ph{background:linear-gradient(135deg,#e4cb8e,#c29a55);color:#1a1509;border-radius:28px;padding:26px 60px;text-align:center}
+.end .ph small{display:block;font-size:40px;font-weight:700}.end .ph b{font-size:96px;font-weight:900;letter-spacing:.02em}
+.end .i{font-size:44px;line-height:1.7;text-align:center}.end .i b{color:var(--gold2)}
+</style></head><body>
+<div class="chip" id="chip"><img src="img/logo-dark.png" alt=""><span><b>KCT학원</b> · 서대문 수학·영어</span></div>
+<div id="items"></div>
+<div class="sub" id="sub"><span></span></div>
+<script>
+const P = window.PLAN;
+const items = document.getElementById('items');
+P.cards.forEach(c => {
+  const d = document.createElement('div');
+  if (c.img) { d.className = 'pic'; d.innerHTML = `<img src="${c.img}" alt="">`; }
+  else if (c.end) { d.className = 'end'; d.innerHTML = c.html; }
+  else { d.className = 'card'; d.innerHTML = c.html; }
+  items.appendChild(d); c.el = d;
+});
+const sub = document.querySelector('#sub span'), chip = document.getElementById('chip');
+const clamp = x => Math.max(0, Math.min(1, x)), ease = x => 1 - Math.pow(1 - clamp(x), 3);
+window.seek = t => {
+  P.cards.forEach(c => {
+    const pin = ease((t - c.t0) / 0.3), pout = clamp((c.t1 - t) / 0.2);
+    const v = t >= c.t0 && t < c.t1 ? Math.min(pin, pout) : 0;
+    c.el.style.opacity = v;
+    if (!c.end) c.el.style.transform = `translate(-50%,0) scale(${0.86 + 0.14 * pin})`;
+  });
+  const s = P.subs.find(s => t >= s.t0 && t < s.t1);
+  sub.innerHTML = s ? s.html : ''; sub.style.display = s ? 'inline-block' : 'none';
+  chip.style.opacity = t < P.endStart ? 1 : 0;
+};
+window.ready = document.fonts.ready.then(() => Promise.all([...document.images].map(i => i.decode().catch(() => {}))));
+</script></body></html>

@@ -1,0 +1,628 @@
+<title>피타고라스 정리 예습 칠판</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Gowun+Dodum&display=swap">
+<style>
+/* Layout: a classroom wall — one 16:9 chalkboard in a wooden frame, a chalk ledge, and a plain player bar + chapter list below. Deliberately single (dark) look. */
+:root {
+  --wall: #0d0c11;
+  --wall-2: #1c1b23;
+  --board: #16151b;
+  --frame: #c9a96c;
+  --frame-dark: #7d6234;
+  --chalk: #f2efe4;
+  --chalk-yellow: #e2c98c;
+  --chalk-pink: #f2a4b6;
+  --chalk-blue: #9fd2ee;
+  --ink: #e9e6dc;
+  --muted: #a9b3ad;
+  --accent: #e2c98c;
+  --font-chalk: "Nanum Pen Script", "Gaegu", "Comic Sans MS", cursive;
+  --font-ui: "Gowun Dodum", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: radial-gradient(120% 80% at 50% 0%, var(--wall-2), var(--wall));
+  color: var(--ink);
+  font-family: var(--font-ui);
+  min-height: 100vh;
+}
+.wrap {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding-block: 28px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid;
+  gap: 18px;
+}
+header.top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 16px; }
+header.top h1 { margin: 0; font-size: 1.35rem; font-weight: 400; letter-spacing: .01em; text-wrap: balance; }
+header.top h1 b { color: var(--accent); font-weight: 400; }
+header.top p { margin: 0; color: var(--muted); font-size: .9rem; }
+
+/* ---------- board ---------- */
+.frame {
+  position: relative;
+  padding: clamp(8px, 1.6vw, 18px);
+  background: linear-gradient(135deg, var(--frame), var(--frame-dark));
+  border-radius: 6px;
+  box-shadow: 0 18px 40px rgba(0,0,0,.45), inset 0 0 0 2px rgba(255,255,255,.06);
+}
+.viewport {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-width: 100%;
+  overflow: hidden;
+  background: var(--board);
+  border-radius: 2px;
+}
+.stage {
+  position: absolute; left: 0; top: 0;
+  width: 1280px; height: 720px;
+  transform-origin: 0 0;
+  background-color: var(--board);
+  background-image:
+    radial-gradient(ellipse at 30% 20%, rgba(255,255,255,.07), transparent 55%),
+    radial-gradient(ellipse at 75% 80%, rgba(255,255,255,.05), transparent 50%),
+    radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.35));
+}
+.stage .smudge { position: absolute; inset: 0; opacity: .5; pointer-events: none; }
+.layer { position: absolute; inset: 0; }
+.layer.erasing { animation: erase .55s ease-in forwards; }
+@keyframes erase { to { opacity: 0; filter: blur(3px); } }
+
+.chalk {
+  position: absolute;
+  font-family: var(--font-chalk);
+  color: var(--chalk);
+  line-height: 1.05;
+  white-space: nowrap;
+  text-shadow: 0 0 1px rgba(255,255,255,.55), 0 0 6px rgba(255,255,255,.12);
+  letter-spacing: .01em;
+}
+.chalk sup { font-size: .6em; line-height: 0; position: relative; top: -.05em; }
+.chalk.ctr { transform: translate(-50%, -50%); }
+.chalk.write { clip-path: inset(-20% 100% -20% -2%); animation: write var(--d, 1s) linear forwards; }
+@keyframes write { to { clip-path: inset(-20% -2% -20% -2%); } }
+.c-yellow { color: var(--chalk-yellow); }
+.c-pink { color: var(--chalk-pink); }
+.c-blue { color: var(--chalk-blue); }
+
+svg.draw-layer { position: absolute; inset: 0; width: 1280px; height: 720px; overflow: visible; }
+svg.draw-layer * { fill: none; stroke: var(--chalk); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+svg .s-yellow { stroke: var(--chalk-yellow); }
+svg .s-pink { stroke: var(--chalk-pink); }
+svg .s-blue { stroke: var(--chalk-blue); }
+svg .fill-yellow { fill: rgba(226,201,140,.13); }
+svg .fill-blue { fill: rgba(159,210,238,.13); }
+svg .fill-pink { fill: rgba(242,164,182,.14); }
+svg .anim { stroke-dasharray: 1; stroke-dashoffset: 1; animation: stroke var(--d, .9s) ease-out forwards; }
+svg .anim[class*="fill-"] { fill-opacity: 0; animation: stroke var(--d, .9s) ease-out forwards, fillin .5s ease-out var(--d, .9s) forwards; }
+@keyframes stroke { to { stroke-dashoffset: 0; } }
+@keyframes fillin { to { fill-opacity: 1; } }
+
+.paused .chalk, .paused svg *, .paused .layer { animation-play-state: paused !important; }
+
+.ledge {
+  position: absolute; left: 6%; right: 6%; bottom: -12px; height: 12px;
+  background: linear-gradient(var(--frame), var(--frame-dark));
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 6px 10px rgba(0,0,0,.35);
+}
+.ledge i { position: absolute; bottom: 9px; height: 7px; border-radius: 3px; }
+.ledge i:nth-child(1) { left: 12%; width: 46px; background: var(--chalk); }
+.ledge i:nth-child(2) { left: 18%; width: 30px; background: var(--chalk-yellow); }
+.ledge i:nth-child(3) { left: 22.5%; width: 24px; background: var(--chalk-pink); }
+.ledge i:nth-child(4) { right: 14%; width: 92px; height: 16px; background: linear-gradient(#3b3f45 50%, #c9c3b0 50%); border-radius: 3px; }
+
+.start {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  background: rgba(15,22,18,.35);
+  border: 0; cursor: pointer; color: var(--chalk);
+  font: inherit;
+}
+.start span {
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 14px 26px; border-radius: 999px;
+  background: rgba(20,28,24,.82); border: 2px solid var(--chalk-yellow);
+  font-family: var(--font-ui); font-size: clamp(15px, 2vw, 20px);
+}
+.start span::before { content: ""; border-left: 14px solid var(--chalk-yellow); border-top: 9px solid transparent; border-bottom: 9px solid transparent; }
+.start:focus-visible span { outline: 3px solid var(--chalk-blue); outline-offset: 3px; }
+
+/* ---------- caption + controls ---------- */
+.caption {
+  min-height: 3.4em;
+  padding: 12px 16px;
+  background: rgba(0,0,0,.28);
+  border-radius: 8px;
+  font-size: clamp(15px, 1.7vw, 18px);
+  line-height: 1.6;
+  margin-top: 6px;
+}
+.caption small { display: block; color: var(--accent); font-size: .78em; letter-spacing: .04em; margin-bottom: 2px; }
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.controls button {
+  font: inherit; font-size: .95rem; color: var(--ink);
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.14);
+  padding: 8px 14px; border-radius: 8px; cursor: pointer;
+}
+.controls button:hover { background: rgba(255,255,255,.12); }
+.controls button:focus-visible, .chapters button:focus-visible, input[type=range]:focus-visible { outline: 2px solid var(--chalk-blue); outline-offset: 2px; }
+.controls button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
+#play { min-width: 92px; }
+.seek { flex: 1 1 260px; display: flex; align-items: center; gap: 10px; min-width: 0; }
+.seek input { flex: 1; min-width: 0; accent-color: var(--chalk-yellow); }
+.time { font-variant-numeric: tabular-nums; color: var(--muted); font-size: .9rem; white-space: nowrap; }
+.voice-note { color: var(--muted); font-size: .82rem; width: 100%; margin: 0; }
+
+.chapters { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; margin: 0; padding: 0; list-style: none; }
+.chapters button {
+  width: 100%; text-align: left; font: inherit; color: var(--ink);
+  background: transparent; border: 1px solid rgba(255,255,255,.1);
+  padding: 9px 12px; border-radius: 8px; cursor: pointer;
+  display: flex; gap: 10px; align-items: baseline;
+}
+.chapters button:hover { background: rgba(255,255,255,.05); }
+.chapters button.on { border-color: var(--accent); background: rgba(243,220,120,.08); }
+.chapters .t { color: var(--muted); font-variant-numeric: tabular-nums; font-size: .82rem; }
+footer { color: var(--muted); font-size: .8rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  .chalk.write, svg .anim { animation-duration: .01s !important; }
+}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <h1><b>피타고라스 정리</b> 예습 강의</h1>
+    <p>모아수학교습소 · 중2 도형과 측정 · 교재 12쪽</p>
+  </header>
+
+  <div class="frame">
+    <div class="viewport" id="viewport">
+      <div class="stage" id="stage">
+        <canvas class="smudge" id="smudge" width="640" height="360"></canvas>
+        <div class="layer" id="layer"></div>
+      </div>
+      <button class="start" id="start" type="button"><span>강의 시작하기 (약 5분)</span></button>
+    </div>
+    <div class="ledge" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  </div>
+
+  <div class="caption" id="caption" aria-live="polite"><small>자막</small>재생을 누르면 칠판 강의가 시작돼요.</div>
+
+  <div class="controls">
+    <button id="play" type="button">재생</button>
+    <button id="prev" type="button" aria-label="이전 장면">이전</button>
+    <button id="next" type="button" aria-label="다음 장면">다음</button>
+    <div class="seek">
+      <input id="seek" type="range" min="0" max="300" step="0.1" value="0" aria-label="재생 위치">
+      <span class="time" id="time">0:00 / 5:00</span>
+    </div>
+    <button id="voice" type="button" aria-pressed="true">음성 켜짐</button>
+    <p class="voice-note" id="voiceNote">선생님 목소리는 기기에 있는 한국어 음성으로 읽어요. 음성이 안 나오면 자막을 보며 들으세요. (스페이스바: 재생/멈춤)</p>
+  </div>
+
+  <ol class="chapters" id="chapters"></ol>
+  <footer>수업 예시용으로 만든 가상 교재를 바탕으로 한 예습 강의예요.</footer>
+</div>
+
+<script>
+// ---------- lecture script ----------
+// text acts: {x,y,s(size),c(color),h(html, ^2 → sup)} ; svg acts: {g:'<shape .../>'}
+const W = 'white';
+const SCENES = [
+  { title: '오늘의 목표', acts: [], steps: [
+    { say: '안녕하세요! 모아수학교습소 예습 강의 시간입니다. 오늘은 중학교 2학년 도형과 측정 단원에서 가장 유명한 정리, 피타고라스 정리를 5분 동안 미리 만나 볼게요.',
+      acts: [
+        { x:120, y:140, s:44, c:'yellow', h:'오늘의 예습' },
+        { x:112, y:200, s:132, h:'피타고라스 정리' },
+        { g:'<path class="s-yellow" d="M120 352 Q 420 340 760 350"/>' },
+        { x:124, y:378, s:40, c:'blue', h:'중2 · 도형과 측정 · 교재 12쪽' },
+      ]},
+    { say: '오늘의 목표는 딱 하나예요. 직각삼각형에서 두 변의 길이를 알면, 나머지 한 변의 길이를 구할 수 있다. 이것만 기억하면 됩니다.',
+      acts: [
+        { x:120, y:500, s:54, c:'pink', h:'목표: 두 변을 알면 → 나머지 한 변을 구한다!' },
+        { g:'<rect class="s-pink" x="96" y="482" width="1010" height="96" rx="14"/>' },
+      ]},
+  ]},
+  { title: '빗변이 뭐예요?', acts: [{ x:70, y:44, s:58, c:'yellow', h:'① 이름부터 알자' }], steps: [
+    { say: '먼저 직각삼각형을 하나 그려 볼게요. 여기 아래 모서리가 직각이에요. 직각 표시는 이렇게 작은 네모로 그립니다.',
+      acts: [
+        { g:'<polygon points="240,600 240,300 640,600"/>', d:1.4 },
+        { g:'<polyline points="240,566 274,566 274,600"/>', d:.5 },
+      ]},
+    { say: '직각을 끼고 있는 두 변을 a와 b라고 부를게요. 교재에서는 가로 변을 a, 세로 변을 b라고 했어요.',
+      acts: [
+        { g:'<line class="s-blue" x1="240" y1="604" x2="640" y2="604" style="stroke-width:7"/>', d:.7 },
+        { x:420, y:612, s:56, c:'blue', h:'a' },
+        { g:'<line class="s-blue" x1="236" y1="600" x2="236" y2="300" style="stroke-width:7"/>', d:.7 },
+        { x:190, y:420, s:56, c:'blue', h:'b' },
+      ]},
+    { say: '그리고 직각과 마주 보는 이 변, 이게 바로 빗변이에요. 빗변을 c라고 씁니다. 빗변은 직각삼각형에서 항상 가장 긴 변이에요.',
+      acts: [
+        { g:'<line class="s-pink" x1="244" y1="296" x2="644" y2="596" style="stroke-width:7"/>', d:.9 },
+        { x:460, y:360, s:56, c:'pink', h:'c (빗변)' },
+        { x:760, y:250, s:50, h:'빗변 = 직각과 마주 보는 변' },
+        { x:760, y:320, s:50, c:'yellow', h:'= 세 변 중 가장 긴 변' },
+      ]},
+    { say: '시험 문제에서 제일 먼저 할 일은 빗변이 어디인지 찾는 거예요. 직각 표시를 찾고, 그 맞은편 변에 동그라미! 이 습관이 실수를 막아 줍니다.',
+      acts: [
+        { g:'<ellipse class="s-yellow" cx="540" cy="390" rx="108" ry="52" transform="rotate(-8 540 390)"/>', d:.8 },
+        { x:760, y:440, s:46, c:'pink', h:'문제 풀기 전에' },
+        { x:760, y:500, s:50, h:'→ 빗변부터 찾기!' },
+      ]},
+  ]},
+  { title: '피타고라스 정리', acts: [{ x:70, y:44, s:58, c:'yellow', h:'② 피타고라스 정리' }], steps: [
+    { say: '이제 핵심 공식이에요. 직각을 낀 두 변을 각각 제곱해서 더하면 빗변의 제곱과 같아집니다. a 제곱 더하기 b 제곱은 c 제곱.',
+      acts: [
+        { x:90, y:150, s:110, c:'yellow', h:'a^2 + b^2 = c^2' },
+        { g:'<rect class="s-yellow" x="66" y="140" width="560" height="140" rx="16"/>' },
+      ]},
+    { say: '정말 그런지 숫자로 확인해 볼까요? 교재 그림처럼 a가 4, b가 3, c가 5인 직각삼각형을 볼게요.',
+      acts: [
+        { g:'<polygon points="860,440 860,320 1020,440"/>', d:1 },
+        { g:'<polyline points="860,420 880,420 880,440"/>', d:.4 },
+        { x:770, y:622, s:42, c:'blue', h:'a = 4,  b = 3,  c = 5' },
+      ]},
+    { say: '각 변 위에 정사각형을 붙여 볼게요. 세로 변 3 위의 정사각형 넓이는 3 곱하기 3, 9. 가로 변 4 위의 정사각형은 4 곱하기 4, 16.',
+      acts: [
+        { g:'<rect class="s-blue fill-blue" x="740" y="320" width="120" height="120"/>', d:.9 },
+        { x:800, y:380, s:54, c:'blue', h:'9', ctr:1 },
+        { g:'<rect class="s-blue fill-blue" x="860" y="440" width="160" height="160"/>', d:.9 },
+        { x:940, y:520, s:54, c:'blue', h:'16', ctr:1 },
+      ]},
+    { say: '빗변 5 위의 정사각형은 5 곱하기 5, 25예요. 그런데 9 더하기 16은? 25! 작은 두 정사각형의 넓이를 합치면 큰 정사각형과 딱 같아요. 이게 피타고라스 정리를 그림으로 본 모습입니다.',
+      acts: [
+        { g:'<polygon class="s-pink fill-pink" points="860,320 1020,440 1140,280 980,160"/>', d:1 },
+        { x:1000, y:300, s:60, c:'pink', h:'25', ctr:1 },
+        { x:90, y:340, s:58, h:'3^2 + 4^2 = 9 + 16 = 25 = 5^2' },
+        { x:90, y:440, s:52, c:'pink', h:'작은 두 정사각형 넓이의 합' },
+        { x:90, y:505, s:52, c:'pink', h:'= 큰 정사각형의 넓이' },
+      ]},
+  ]},
+  { title: '예제 1 · 빗변 구하기', acts: [{ x:70, y:44, s:58, c:'yellow', h:'③ 예제 1 · 빗변 구하기' }], steps: [
+    { say: '그럼 교재 예제 1번을 같이 풀어 봐요. 직각을 낀 두 변의 길이가 6센티미터, 8센티미터인 직각삼각형의 빗변의 길이를 구하는 문제예요.',
+      acts: [
+        { x:80, y:150, s:44, h:'직각을 낀 두 변: 6cm, 8cm → 빗변은?' },
+        { g:'<polygon points="880,600 880,390 1160,600"/>', d:1 },
+        { g:'<polyline points="880,578 902,578 902,600"/>', d:.4 },
+        { x:842, y:470, s:50, c:'blue', h:'6' },
+        { x:1010, y:604, s:50, c:'blue', h:'8' },
+        { x:1040, y:440, s:60, c:'pink', h:'?' },
+      ]},
+    { say: '빗변이 c니까, 공식에 그대로 넣으면 돼요. 6의 제곱 더하기 8의 제곱은 c의 제곱.',
+      acts: [ { x:90, y:250, s:66, h:'6^2 + 8^2 = c^2' } ]},
+    { say: '6의 제곱은 36, 8의 제곱은 64. 더하면 100이에요. 그러니까 c의 제곱이 100이죠.',
+      acts: [ { x:90, y:345, s:66, h:'36 + 64 = 100 = c^2' } ]},
+    { say: '제곱해서 100이 되는 수는 10과 마이너스 10인데, 길이는 항상 양수니까 c는 10센티미터입니다.',
+      acts: [
+        { x:90, y:450, s:46, c:'blue', h:'길이는 양수 (c > 0) 이므로' },
+        { x:90, y:510, s:76, c:'yellow', h:'c = 10 (cm)' },
+        { g:'<rect class="s-yellow" x="70" y="500" width="380" height="100" rx="14"/>' },
+        { x:1080, y:440, s:60, c:'yellow', h:'= 10' },
+      ]},
+  ]},
+  { title: '예제 2 · 빗변이 아닌 변', acts: [{ x:70, y:44, s:58, c:'yellow', h:'④ 예제 2 · 빗변이 아닌 변 구하기' }], steps: [
+    { say: '예제 2번이에요. 이번엔 빗변의 길이가 13센티미터, 다른 한 변이 5센티미터일 때 나머지 한 변을 구합니다. 빗변이 이미 주어졌다는 점에 주목하세요.',
+      acts: [
+        { x:80, y:150, s:44, h:'빗변 13cm, 한 변 5cm → 나머지 한 변은?' },
+        { g:'<polygon points="860,600 860,470 1172,600"/>', d:1 },
+        { g:'<polyline points="860,580 880,580 880,600"/>', d:.4 },
+        { x:824, y:510, s:50, c:'blue', h:'5' },
+        { x:1000, y:606, s:58, c:'pink', h:'b ?' },
+        { x:1030, y:470, s:50, c:'yellow', h:'13 (빗변)' },
+      ]},
+    { say: '빗변 13이 c 자리에 들어가요. 그래서 5의 제곱 더하기 b의 제곱은 13의 제곱, 이렇게 식을 세웁니다.',
+      acts: [ { x:90, y:250, s:66, h:'5^2 + b^2 = 13^2' } ]},
+    { say: 'b의 제곱만 남기려면 13의 제곱에서 5의 제곱을 빼야겠죠. 169 빼기 25는 144.',
+      acts: [ { x:90, y:345, s:66, h:'b^2 = 169 − 25 = 144' } ]},
+    { say: '제곱해서 144가 되는 양수는 12. 그래서 나머지 한 변은 12센티미터예요.',
+      acts: [
+        { x:90, y:460, s:76, c:'yellow', h:'b = 12 (cm)' },
+        { g:'<rect class="s-yellow" x="70" y="450" width="380" height="100" rx="14"/>' },
+        { x:1000, y:650, s:46, c:'yellow', h:'= 12' },
+      ]},
+  ]},
+  { title: '자주 하는 실수', acts: [{ x:70, y:44, s:58, c:'pink', h:'⑤ 시험에서 자주 하는 실수' }], steps: [
+    { say: '여기서 시험에 정말 자주 나오는 실수가 있어요. 빗변이 아닌 변을 구할 때도, 습관처럼 두 수를 제곱해서 더해 버리는 거예요.',
+      acts: [
+        { x:110, y:180, s:66, h:'5^2 + 13^2 = 25 + 169 = 194' },
+        { g:'<line class="s-pink" x1="100" y1="190" x2="800" y2="260" style="stroke-width:6"/>', d:.4 },
+        { g:'<line class="s-pink" x1="100" y1="260" x2="800" y2="190" style="stroke-width:6"/>', d:.4 },
+      ]},
+    { say: '이렇게 더하면 빗변보다 더 긴 변이 나와 버려요. 빗변은 가장 긴 변이어야 하는데 말이죠. 그래서 규칙은 이렇습니다.',
+      acts: [ { x:120, y:290, s:50, c:'pink', h:'→ 빗변(13)보다 더 길어져 버림!' } ]},
+    { say: '빗변을 구할 때는 두 수의 제곱을 더하고, 빗변이 주어지면 큰 수의 제곱에서 작은 수의 제곱을 뺍니다. 이 두 줄, 꼭 기억하세요.',
+      acts: [
+        { x:120, y:420, s:56, c:'yellow', h:'빗변을 구할 때 → 제곱해서 더하기 (+)' },
+        { x:120, y:505, s:56, c:'yellow', h:'빗변이 주어지면 → 큰 수^2 − 작은 수^2 (−)' },
+        { g:'<rect class="s-yellow" x="96" y="400" width="1000" height="190" rx="16"/>' },
+      ]},
+  ]},
+  { title: '직각삼각형 판별', acts: [{ x:70, y:44, s:58, c:'yellow', h:'⑥ 거꾸로도 쓸 수 있어요' }], steps: [
+    { say: '피타고라스 정리는 거꾸로도 쓸 수 있어요. 세 변의 길이가 주어졌을 때, 가장 긴 변의 제곱이 나머지 두 변의 제곱의 합과 같으면 그 삼각형은 직각삼각형입니다.',
+      acts: [
+        { x:90, y:170, s:54, h:'(가장 긴 변)^2 = (나머지 두 변의 제곱의 합)' },
+        { x:90, y:250, s:54, c:'yellow', h:'→ 직각삼각형!' },
+      ]},
+    { say: '예를 들어 세 변이 6, 8, 10이면, 36 더하기 64가 100이고 10의 제곱도 100이니까 직각삼각형이에요. 같지 않으면 직각삼각형이 아니고요.',
+      acts: [
+        { x:90, y:380, s:56, c:'blue', h:'세 변 6, 8, 10' },
+        { x:90, y:455, s:60, h:'6^2 + 8^2 = 36 + 64 = 100 = 10^2' },
+        { x:90, y:540, s:56, c:'yellow', h:'같다 → 직각삼각형 ○' },
+      ]},
+  ]},
+  { title: '확인 문제', acts: [{ x:70, y:44, s:58, c:'yellow', h:'⑦ 확인 문제 · 직접 풀어 보기' }], steps: [
+    { say: '이제 교재 확인 문제를 직접 풀어 볼 차례예요. 1번, 직각을 낀 두 변이 9와 12일 때 빗변. 2번, 빗변이 17이고 한 변이 8일 때 나머지 한 변. 3번, 세 변이 5, 7, 9인 삼각형은 직각삼각형일까요?',
+      acts: [
+        { x:90, y:160, s:48, h:'1. 직각을 낀 두 변 9cm, 12cm → 빗변은?' },
+        { x:90, y:300, s:48, h:'2. 빗변 17cm, 한 변 8cm → 나머지 한 변은?' },
+        { x:90, y:440, s:48, h:'3. 세 변 5cm, 7cm, 9cm → 직각삼각형일까?' },
+      ]},
+    { say: '영상을 잠깐 멈추고 직접 풀어 보세요. 다 풀었으면 다시 재생해서 답을 확인합니다.', pad: 6,
+      acts: [ { x:90, y:590, s:56, c:'pink', h:'잠깐 멈추고 풀어 보세요!', id:'pausemsg' } ]},
+    { say: '정답 공개! 1번은 81 더하기 144가 225, 그래서 빗변은 15센티미터. 2번은 빗변이 주어졌으니 빼기! 289 빼기 64는 225, 나머지 한 변도 15센티미터예요.',
+      acts: [
+        { hide:'pausemsg', d:.01 },
+        { x:120, y:220, s:48, c:'yellow', h:'9^2 + 12^2 = 81 + 144 = 225 = 15^2 → 15cm' },
+        { x:120, y:360, s:48, c:'yellow', h:'17^2 − 8^2 = 289 − 64 = 225 = 15^2 → 15cm' },
+      ]},
+    { say: '3번은 가장 긴 변 9의 제곱이 81인데, 5의 제곱과 7의 제곱을 더하면 25 더하기 49, 74예요. 같지 않으니까 직각삼각형이 아닙니다.',
+      acts: [ { x:120, y:500, s:48, c:'yellow', h:'5^2 + 7^2 = 74 ≠ 81 = 9^2 → 직각삼각형 아님 ×' } ]},
+  ]},
+  { title: '오늘의 정리', acts: [{ x:70, y:44, s:58, c:'yellow', h:'오늘의 정리' }], steps: [
+    { say: '오늘 배운 내용을 정리할게요. 첫째, 빗변은 직각과 마주 보는 가장 긴 변. 둘째, a 제곱 더하기 b 제곱은 c 제곱. 셋째, 빗변이 주어지면 큰 수의 제곱에서 작은 수의 제곱을 뺀다.',
+      acts: [
+        { x:100, y:160, s:56, h:'1. 빗변 = 직각과 마주 보는 가장 긴 변' },
+        { x:100, y:250, s:56, h:'2. a^2 + b^2 = c^2' },
+        { x:100, y:340, s:56, h:'3. 빗변이 주어지면 큰 수^2 − 작은 수^2' },
+      ]},
+    { say: '수업 시간에는 이 정리가 왜 성립하는지 증명도 함께 볼 거예요. 그럼 수업 시간에 만나요!', pad: 2,
+      acts: [
+        { x:100, y:460, s:46, c:'blue', h:'다음 시간: 왜 성립할까? (증명)' },
+        { x:100, y:540, s:90, c:'yellow', h:'수업 시간에 만나요!' },
+      ]},
+  ]},
+];
+
+// ---------- build timeline ----------
+const SEC_PER_CHAR = 0.13;
+const STEPS = [];
+SCENES.forEach((sc, si) => {
+  sc.steps.forEach((st, k) => {
+    const acts = (k === 0 ? sc.acts : []).concat(st.acts);
+    let cur = 0.3;
+    const timed = acts.map(a => {
+      const plain = a.h ? a.h.replace(/\^2/g, '2') : '';
+      const d = a.d ?? (a.g ? 0.9 : Math.min(2.4, Math.max(0.5, plain.length * 0.07)));
+      const t = { ...a, d, at: a.at ?? cur };
+      cur = t.at + d + 0.2;
+      return t;
+    });
+    const sayDur = st.say.length * SEC_PER_CHAR + 0.8;
+    STEPS.push({ scene: si, first: k === 0, say: st.say, acts: timed, dur: Math.max(sayDur, cur + 0.6) + (st.pad || 0) });
+  });
+});
+let acc = 0;
+STEPS.forEach(s => { s.start = acc; acc += s.dur; });
+const TOTAL = acc;
+const sceneStart = SCENES.map((_, i) => STEPS.findIndex(s => s.scene === i));
+
+// ---------- DOM ----------
+const $ = id => document.getElementById(id);
+const stage = $('stage'), viewport = $('viewport');
+let layer = $('layer');
+const NS = 'http://www.w3.org/2000/svg';
+
+function fit() {
+  const k = viewport.clientWidth / 1280;
+  stage.style.transform = `scale(${k})`;
+}
+new ResizeObserver(fit).observe(viewport);
+fit();
+
+// chalk dust texture
+(() => {
+  const c = $('smudge'), g = c.getContext('2d');
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  for (let i = 0; i < 26; i++) {
+    const x = rnd() * 640, y = rnd() * 360, r = 30 + rnd() * 90;
+    const grd = g.createRadialGradient(x, y, 0, x, y, r);
+    grd.addColorStop(0, 'rgba(255,255,255,0.05)'); grd.addColorStop(1, 'rgba(255,255,255,0)');
+    g.fillStyle = grd; g.beginPath(); g.ellipse(x, y, r * 1.8, r * .6, rnd() * 3, 0, 7); g.fill();
+  }
+  for (let i = 0; i < 1800; i++) { g.fillStyle = `rgba(255,255,255,${rnd() * .06})`; g.fillRect(rnd() * 640, rnd() * 360, 1, 1); }
+})();
+
+let svg;
+function newLayer(eraseOld) {
+  const old = layer;
+  const fresh = document.createElement('div');
+  fresh.className = 'layer';
+  svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('class', 'draw-layer');
+  svg.setAttribute('viewBox', '0 0 1280 720');
+  fresh.appendChild(svg);
+  stage.appendChild(fresh);
+  layer = fresh;
+  if (eraseOld && old) { old.classList.add('erasing'); setTimeout(() => old.remove(), 600); }
+  else if (old) old.remove();
+}
+
+function render(a, animate) {
+  if (a.hide) { layer.querySelectorAll(`[data-id="${a.hide}"]`).forEach(e => e.remove()); return; }
+  if (a.g) {
+    const tmp = document.createElementNS(NS, 'svg');
+    tmp.innerHTML = a.g;
+    [...tmp.children].forEach(el => {
+      el.setAttribute('pathLength', '1');
+      if (animate) { el.classList.add('anim'); el.style.setProperty('--d', a.d + 's'); }
+      svg.appendChild(el);
+    });
+  } else {
+    const el = document.createElement('div');
+    el.className = 'chalk' + (a.c ? ' c-' + a.c : '') + (a.ctr ? ' ctr' : '') + (animate ? ' write' : '');
+    el.style.left = a.x + 'px'; el.style.top = a.y + 'px'; el.style.fontSize = a.s + 'px';
+    el.style.setProperty('--d', a.d + 's');
+    if (a.id) el.dataset.id = a.id;
+    el.innerHTML = a.h.replace(/\^2/g, '<sup>2</sup>');
+    layer.appendChild(el);
+  }
+}
+
+// ---------- player ----------
+let idx = 0, t = 0, playing = false, fired = 0, last = 0, ended = false;
+let voiceOn = true, speaking = false, speakStarted = 0;
+const synth = window.speechSynthesis;
+let koVoice = null;
+function pickVoice() {
+  if (!synth) return;
+  const vs = synth.getVoices();
+  koVoice = vs.find(v => /^ko/i.test(v.lang)) || null;
+}
+if (synth) { pickVoice(); synth.onvoiceschanged = pickVoice; }
+
+function speak(text) {
+  if (!synth || !voiceOn) { speaking = false; return; }
+  try {
+    synth.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'ko-KR'; u.rate = 1.1; if (koVoice) u.voice = koVoice;
+    speaking = true; speakStarted = performance.now();
+    u.onend = u.onerror = () => { speaking = false; };
+    synth.speak(u);
+  } catch (e) { speaking = false; }
+}
+function stopSpeech() { speaking = false; try { synth && synth.cancel(); } catch (e) {} }
+
+function setCaption(i) {
+  const s = STEPS[i];
+  $('caption').innerHTML = `<small>${SCENES[s.scene].title}</small>` + s.say;
+}
+
+function buildTo(i) { // board state at the start of step i, drawn instantly
+  newLayer(false);
+  const s0 = sceneStart[STEPS[i].scene];
+  for (let j = s0; j < i; j++) STEPS[j].acts.forEach(a => render(a, false));
+}
+
+function enterStep(i, fresh) {
+  idx = i; t = 0; fired = 0; ended = false;
+  if (fresh && STEPS[i].first && i > 0) newLayer(true);
+  setCaption(i); markChapter();
+  if (playing) speak(STEPS[i].say);
+}
+
+function jump(i) {
+  i = Math.max(0, Math.min(STEPS.length - 1, i));
+  stopSpeech();
+  buildTo(i);
+  enterStep(i, false);
+  updateUI();
+}
+
+function fire(upTo) {
+  const acts = STEPS[idx].acts;
+  while (fired < acts.length && acts[fired].at <= upTo) render(acts[fired++], true);
+}
+
+function tick(now) {
+  const dt = Math.min(0.1, (now - last) / 1000); last = now;
+  if (playing) {
+    t += dt;
+    fire(t);
+    const s = STEPS[idx];
+    const speechHang = speaking && (performance.now() - speakStarted) / 1000 > s.dur + 10;
+    if (t >= s.dur && (!speaking || speechHang)) {
+      if (idx < STEPS.length - 1) enterStep(idx + 1, true);
+      else { t = s.dur; setPlaying(false); ended = true; }
+    }
+    updateUI();
+  }
+  requestAnimationFrame(tick);
+}
+
+function setPlaying(p) {
+  playing = p;
+  stage.classList.toggle('paused', !p);
+  $('play').textContent = p ? '일시정지' : (ended ? '다시 보기' : '재생');
+  $('start').hidden = true;
+  if (synth) {
+    if (p) { if (synth.paused) synth.resume(); else if (!speaking && t < STEPS[idx].dur * 0.8) speak(STEPS[idx].say); }
+    else { try { synth.pause(); } catch (e) {} }
+  }
+}
+
+function toggle() {
+  if (ended) { ended = false; jump(0); setPlaying(true); return; }
+  setPlaying(!playing);
+}
+
+const fmt = s => { s = Math.max(0, Math.floor(s)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
+const seek = $('seek');
+seek.max = TOTAL.toFixed(1);
+let seeking = false;
+function updateUI() {
+  const cur = STEPS[idx].start + Math.min(t, STEPS[idx].dur);
+  if (!seeking) seek.value = cur;
+  $('time').textContent = fmt(cur) + ' / ' + fmt(TOTAL);
+}
+seek.addEventListener('input', () => {
+  seeking = true;
+  const v = +seek.value;
+  let i = STEPS.findIndex(s => v < s.start + s.dur); if (i < 0) i = STEPS.length - 1;
+  if (i !== idx || v < STEPS[idx].start) { const wasPlaying = playing; jump(i); if (wasPlaying) speak(STEPS[i].say); }
+  $('time').textContent = fmt(v) + ' / ' + fmt(TOTAL);
+});
+seek.addEventListener('change', () => { seeking = false; updateUI(); });
+
+$('play').onclick = toggle;
+$('start').onclick = () => { jump(0); setPlaying(true); };
+$('prev').onclick = () => {
+  const sc = STEPS[idx].scene;
+  const target = (idx === sceneStart[sc] && t < 2 && sc > 0) ? sceneStart[sc - 1] : sceneStart[sc];
+  jump(target); if (playing) speak(STEPS[target].say);
+};
+$('next').onclick = () => {
+  const sc = STEPS[idx].scene;
+  if (sc < SCENES.length - 1) { jump(sceneStart[sc + 1]); if (playing) speak(STEPS[idx].say); }
+};
+$('voice').onclick = () => {
+  voiceOn = !voiceOn;
+  $('voice').setAttribute('aria-pressed', voiceOn);
+  $('voice').textContent = voiceOn ? '음성 켜짐' : '음성 꺼짐';
+  if (!voiceOn) stopSpeech(); else if (playing) speak(STEPS[idx].say);
+};
+if (!synth) { voiceOn = false; $('voice').hidden = true; $('voiceNote').textContent = '이 기기에서는 음성 읽기를 쓸 수 없어요. 자막을 보며 따라와 주세요. (스페이스바: 재생/멈춤)'; }
+document.addEventListener('keydown', e => {
+  if (e.code === 'Space' && !/INPUT|BUTTON/.test(document.activeElement.tagName)) { e.preventDefault(); $('start').hidden ? toggle() : $('start').click(); }
+});
+
+// chapters
+const chapters = $('chapters');
+SCENES.forEach((sc, i) => {
+  const li = document.createElement('li');
+  const b = document.createElement('button'); b.type = 'button';
+  b.innerHTML = `<span class="t">${fmt(STEPS[sceneStart[i]].start)}</span><span>${sc.title}</span>`;
+  b.onclick = () => { jump(sceneStart[i]); if (!playing) setPlaying(true); else speak(STEPS[idx].say); };
+  li.appendChild(b); chapters.appendChild(li);
+});
+function markChapter() {
+  [...chapters.querySelectorAll('button')].forEach((b, i) => b.classList.toggle('on', i === STEPS[idx].scene));
+}
+
+// resting state: the first board fully written, waiting for 시작
+newLayer(false);
+STEPS.filter(s => s.scene === 0).forEach(s => s.acts.forEach(a => render(a, false)));
+setCaption(0); markChapter();
+stage.classList.add('paused');
+updateUI();
+last = performance.now();
+requestAnimationFrame(tick);
+</script>

@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<title>KCT학원 홍보 쇼츠</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700;800&family=Noto+Sans+KR:wght@500;700;900&display=block">
+<style>
+:root{--bg:#121117;--card:#1c1b23;--card2:#26242e;--ink:#f3f0e9;--muted:#aba8b0;--gold:#c9a96c;--gold2:#e2c98c;
+--serif:"Nanum Myeongjo",serif;--sans:"Noto Sans KR",sans-serif}
+*{box-sizing:border-box;margin:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg)}
+body{font-family:var(--sans);color:var(--ink)}
+#stage{position:relative;width:1080px;height:1920px;background:
+ radial-gradient(900px 700px at 50% 0%,rgba(201,169,108,.16),transparent 70%),
+ radial-gradient(800px 600px at 50% 100%,rgba(201,169,108,.08),transparent 70%),var(--bg)}
+.top{position:absolute;left:0;right:0;top:0;height:150px;display:flex;align-items:center;justify-content:space-between;padding:0 70px;
+ border-bottom:1px solid rgba(201,169,108,.25)}
+.top .brand{display:flex;align-items:center;gap:18px;font-weight:700;font-size:34px;letter-spacing:.02em}
+.top .brand img{width:64px;height:60px;object-fit:contain}
+.top .brand b{color:var(--gold2)}
+.dots{display:flex;gap:10px}.dots i{width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,.18)}
+.dots i.on{background:var(--gold)}
+.scene{position:absolute;left:0;right:0;top:150px;height:1290px;opacity:0}
+.el{position:absolute;will-change:transform,opacity}
+.serif{font-family:var(--serif);font-weight:800}
+.gold{color:var(--gold2)}
+.sub{position:absolute;left:60px;right:60px;top:1480px;height:300px;display:flex;align-items:center;justify-content:center;text-align:center}
+.sub span{display:inline-block;background:rgba(10,9,13,.82);border:2px solid rgba(201,169,108,.45);border-radius:22px;padding:26px 40px;
+ font-size:54px;font-weight:700;line-height:1.38;word-break:keep-all}
+.sub em{font-style:normal;color:var(--gold2)}
+.foot{position:absolute;left:0;right:0;bottom:0;height:140px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:30px;letter-spacing:.06em}
+/* scene pieces */
+.q{left:90px;right:90px;font-size:104px;line-height:1.35;word-break:keep-all}
+.photo{left:160px;top:90px;width:760px;height:900px;border-radius:36px;overflow:hidden;border:4px solid var(--gold);background:#9a9a9a}
+.photo img{width:100%;height:100%;object-fit:cover;object-position:50% 22%}
+.plate{left:160px;width:760px;top:930px;padding:26px 36px;background:var(--card);border:2px solid var(--gold);border-radius:24px}
+.plate .n{font-size:52px;font-weight:900}.plate .r{font-size:32px;color:var(--muted);margin-top:6px}
+.h2{left:80px;right:80px;text-align:center;font-size:84px;line-height:1.3}
+.cells{left:110px;width:860px;top:420px;display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.cell{height:190px;border-radius:24px;border:3px dashed rgba(226,201,140,.55);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:44px;font-weight:700;color:var(--muted)}
+.cell small{font-size:28px;font-weight:500;margin-top:6px}
+.cell.full{border-style:solid;border-color:var(--gold);background:linear-gradient(135deg,#e4cb8e,#c29a55);color:#1a1509}
+.step{left:110px;width:860px;height:150px;border-radius:28px;background:var(--card);border:2px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:36px;padding:0 44px}
+.step b{font-size:56px;color:var(--gold);font-family:var(--serif);width:90px}
+.step .t{font-size:58px;font-weight:900}.step .d{font-size:32px;color:var(--muted);margin-left:auto}
+.step.on{background:linear-gradient(135deg,#e4cb8e,#c29a55);border-color:var(--gold)}
+.step.on b,.step.on .t,.step.on .d{color:#1a1509}
+.quote{left:110px;width:860px;top:900px;padding:40px 44px;border-left:8px solid var(--gold);background:rgba(201,169,108,.08);border-radius:0 24px 24px 0;font-size:60px;line-height:1.4}
+.poster{width:440px;border-radius:24px;overflow:hidden;border:4px solid var(--gold);box-shadow:0 30px 60px rgba(0,0,0,.5)}
+.poster img{width:100%;display:block}
+.logo{left:340px;top:40px;width:400px;height:374px;object-fit:contain}
+.cta{left:110px;width:860px;padding:38px;border-radius:30px;background:linear-gradient(135deg,#e4cb8e,#c29a55);color:#1a1509;text-align:center}
+.cta .a{font-size:46px;font-weight:700}.cta .b{font-size:84px;font-weight:900;letter-spacing:.02em;margin-top:6px}
+.info{left:110px;width:860px;font-size:44px;line-height:1.75;text-align:center}
+.info b{color:var(--gold2)}
+
+.stagebg{left:0;top:0;width:1080px;height:1290px;overflow:hidden;background:
+ repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 2px,transparent 2px 120px),linear-gradient(#1b1920,#121117 70%)}
+.spot{position:absolute;left:90px;top:-120px;width:900px;height:1250px;background:radial-gradient(ellipse 50% 60% at 50% 35%,rgba(242,214,150,.42),rgba(201,169,108,.12) 55%,transparent 75%)}
+.curtain{position:absolute;top:0;width:170px;height:1100px;background:repeating-linear-gradient(90deg,#3b2c16 0 18px,#6e5328 34px,#94733c 44px,#6e5328 54px,#3b2c16 70px);box-shadow:inset 0 -60px 80px rgba(0,0,0,.6)}
+.curtain.l{left:0;border-bottom-right-radius:120px 300px}.curtain.r{right:0;border-bottom-left-radius:120px 300px}
+.valance{position:absolute;left:0;right:0;top:0;height:70px;background:repeating-radial-gradient(circle at 40px -10px,#94733c 0 30px,#5a4320 31px 46px,transparent 47px);background-size:80px 70px;border-bottom:3px solid #c9a96c}
+.floor{position:absolute;left:0;right:0;bottom:0;height:300px;background:linear-gradient(rgba(201,169,108,.10),rgba(0,0,0,.6)),repeating-linear-gradient(90deg,#1e1a14 0 3px,#17140f 3px 140px)}
+.portrait{left:215px;top:175px;width:650px;height:792px;transform-origin:50% 100%}
+.portrait img{width:100%;height:100%;object-fit:contain;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 9%,#000 91%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 9%,#000 91%,transparent 100%);filter:drop-shadow(0 0 40px rgba(242,214,150,.18))}
+.lectern{left:200px;top:800px;width:680px;height:420px}
+.lectern .lid{position:absolute;left:-20px;right:-20px;top:0;height:34px;border-radius:8px;background:linear-gradient(#e4cb8e,#9c7a42);box-shadow:0 10px 24px rgba(0,0,0,.5)}
+.lectern .front{position:absolute;left:0;right:0;top:30px;bottom:0;clip-path:polygon(0 0,100% 0,94% 100%,6% 100%);
+ background:linear-gradient(#24212b,#121117);border-top:2px solid #c9a96c;display:flex;flex-direction:column;align-items:center;padding-top:34px}
+.lectern .front::after{content:"";position:absolute;inset:14px 50px 20px;border:2px solid rgba(201,169,108,.55);clip-path:polygon(0 0,100% 0,95% 100%,5% 100%)}
+.lectern img{width:120px;height:112px;object-fit:contain}
+.lectern .n{font-size:58px;font-weight:900;margin-top:8px}.lectern .r{font-size:30px;color:var(--muted);margin-top:8px}
+.headpill{left:120px;right:120px;padding:14px 0;border-radius:999px;background:rgba(12,11,15,.78);border:2px solid rgba(201,169,108,.5);z-index:3}
+.uline{height:8px;background:var(--gold);border-radius:4px;transform-origin:0 50%}
+</style></head>
+<body><div id="stage">
+ <div class="top"><div class="brand"><img src="img/logo-dark.png" alt=""><span><b>KCT학원</b> · 서대문 수학·영어</span></div><div class="dots" id="dots"></div></div>
+ <div id="scenes"></div>
+ <div class="sub" id="sub"><span></span></div>
+ <div class="foot">오로지 학생 중심 · 케이씨티학원</div>
+</div>
+<script>
+// TIMELINE is injected: [{start,end,say,chunks:[{t0,t1,html}]}]
+const T = window.TIMELINE;
+const scenesEl = document.getElementById('scenes');
+const S = [];  // per scene: list of {el, at, dur, kind}
+function scene(html){const d=document.createElement('div');d.className='scene';d.innerHTML=html;scenesEl.appendChild(d);return d;}
+function q(root,sel){return root.querySelector(sel);}
+
+// ---- scene 1: question
+let s=scene(`
+ <div class="el q serif" style="top:250px" id="a1">우리 아이,</div>
+ <div class="el q serif" style="top:400px" id="a2">학년은 올라가는데</div>
+ <div class="el q serif" style="top:550px" id="a3"><span class="gold">기초</span>는 비어 있진</div>
+ <div class="el q serif" style="top:700px" id="a4">않나요?</div>
+ <div class="el uline" style="left:92px;top:690px;width:210px" id="a5"></div>`);
+S.push({root:s,items:[[q(s,'#a1'),.1,'up'],[q(s,'#a2'),.9,'up'],[q(s,'#a3'),2.0,'up'],[q(s,'#a4'),2.6,'up'],[q(s,'#a5'),3.1,'draw']]});
+
+// ---- scene 2: director on stage (강단)
+s=scene(`
+ <div class="el stagebg" id="b0"><div class="spot"></div><div class="curtain l"></div><div class="curtain r"></div><div class="valance"></div><div class="floor"></div></div>
+ <div class="el h2 serif headpill" style="top:96px;font-size:58px" id="b3">학년이 아니라, <span class="gold">지금 실력</span>에서</div>
+ <div class="el portrait" id="b1"><img src="img/director-cut.png" alt=""></div>
+ <div class="el lectern" id="b2"><div class="lid"></div><div class="front"><img src="img/logo-dark.png" alt=""><div class="n">원장 <span class="gold">형주연</span></div><div class="r">20년 학원 운영 · 상담학 박사</div></div></div>`);
+S.push({root:s,items:[[q(s,'#b0'),0,'fade'],[q(s,'#b1'),.15,'zoomin'],[q(s,'#b2'),.45,'up'],[q(s,'#b3'),4.6,'up']],ken:q(s,'#b1 img')});
+
+// ---- scene 3: level test cells
+const cells=[['초5','1학기',1],['초5','2학기',0],['초6','1학기',1],['초6','2학기',0],['중1','1학기',0],['중1','2학기',1]];
+s=scene(`
+ <div class="el h2 serif" style="top:120px" id="c1"><span class="gold">무료</span> 레벨테스트</div>
+ <div class="el" style="left:0;right:0;top:270px;text-align:center;font-size:40px;color:var(--muted)" id="c2">비어 있는 학기를 찾아요</div>
+ <div class="el cells" id="c3">${cells.map((c,i)=>`<div class="cell ${c[2]?'full':''}" id="cell${i}">${c[0]}<small>${c[1]}</small></div>`).join('')}</div>
+ <div class="el h2 serif" style="top:930px;font-size:66px" id="c4">하나씩 <span class="gold">다시 채워</span> 올려요</div>`);
+S.push({root:s,items:[[q(s,'#c1'),0,'up'],[q(s,'#c2'),.5,'up'],[q(s,'#c3'),.9,'up'],[q(s,'#c4'),3.5,'up']],
+ fills:[[q(s,'#cell1'),3.6],[q(s,'#cell3'),4.1],[q(s,'#cell4'),4.6]]});
+
+// ---- scene 4: KES
+const steps=[['01','강의','개념부터 정확하게'],['02','정리','수학노트·문법노트'],['03','설명','학생이 선생님'],['04','반복','다 맞을 때까지']];
+s=scene(`
+ <div class="el h2 serif" style="top:40px;font-size:72px" id="d0"><span class="gold">케스(KES)</span> 학습법</div>
+ ${steps.map((x,i)=>`<div class="el step" style="top:${190+i*170}px" id="st${i}"><b>${x[0]}</b><span class="t">${x[1]}</span><span class="d">${x[2]}</span></div>`).join('')}
+ <div class="el quote serif" id="d5">“설명할 수 없다면,<br><span class="gold">아는 것이 아닙니다.”</span></div>`);
+S.push({root:s,items:[[q(s,'#d0'),0,'up'],[q(s,'#st0'),.1,'up'],[q(s,'#st1'),.9,'up'],[q(s,'#st2'),1.7,'up'],[q(s,'#st3'),2.9,'up'],[q(s,'#d5'),5.1,'up']],
+ ons:[[q(s,'#st0'),.1,.9],[q(s,'#st1'),.9,1.7],[q(s,'#st2'),1.7,2.9],[q(s,'#st3'),2.9,99]]});
+
+// ---- scene 5: cooking
+s=scene(`
+ <div class="el h2 serif" style="top:40px;font-size:68px" id="e0">월말평가 끝나면</div>
+ <div class="el h2 serif gold" style="top:140px;font-size:96px" id="e1">쿠킹클래스!</div>
+ <div class="el poster" style="left:70px;top:330px;transform-origin:50% 100%" id="e2"><img src="img/cook-duzzonku.jpg" alt=""></div>
+ <div class="el poster" style="left:570px;top:380px;transform-origin:50% 100%" id="e3"><img src="img/cook-spring.jpg" alt=""></div>
+ <div class="el h2 serif" style="top:1080px;font-size:62px" id="e4">놀 때는 제대로, <span class="gold">할 때는 끝까지</span></div>`);
+S.push({root:s,items:[[q(s,'#e0'),0,'up'],[q(s,'#e1'),.5,'pop'],[q(s,'#e2'),1.0,'tiltL'],[q(s,'#e3'),1.5,'tiltR'],[q(s,'#e4'),3.4,'up']]});
+
+// ---- scene 6: CTA
+s=scene(`
+ <img class="el logo" src="img/logo-dark.png" alt="" id="f0">
+ <div class="el h2 serif" style="top:450px;font-size:70px" id="f1">지금, 우리 아이<br><span class="gold">현주소</span>부터 확인하세요</div>
+ <div class="el cta" style="top:700px" id="f2"><div class="a">무료 레벨테스트 · 전화 상담</div><div class="b">02-379-7161</div></div>
+ <div class="el info" style="top:960px" id="f3">카카오톡 채널 <b>kct7</b><br>서울 서대문구 가좌로 114</div>`);
+S.push({root:s,items:[[q(s,'#f0'),0,'pop'],[q(s,'#f1'),.5,'up'],[q(s,'#f2'),1.4,'pop'],[q(s,'#f3'),2.2,'up']]});
+
+document.getElementById('dots').innerHTML=S.map(()=>'<i></i>').join('');
+const dots=[...document.querySelectorAll('#dots i')];
+const sub=document.querySelector('#sub span');
+
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const ease=x=>1-Math.pow(1-clamp(x),3);
+function apply(el,kind,p){
+  const e=ease(p);
+  switch(kind){
+    case 'up': el.style.opacity=e; el.style.transform=`translateY(${(1-e)*40}px)`; break;
+    case 'fade': el.style.opacity=e; break;
+    case 'pop': el.style.opacity=e; el.style.transform=`scale(${.85+.15*e})`; break;
+    case 'zoomin': el.style.opacity=e; el.style.transform=`scale(${.94+.06*e})`; break;
+    case 'draw': el.style.opacity=p>0?1:0; el.style.transform=`scaleX(${e})`; break;
+    case 'tiltL': el.style.opacity=e; el.style.transform=`translateY(${(1-e)*120}px) rotate(${-4*e}deg)`; break;
+    case 'tiltR': el.style.opacity=e; el.style.transform=`translateY(${(1-e)*120}px) rotate(${4*e}deg)`; break;
+  }
+}
+window.seek=function(t){
+  let cur=0;
+  T.forEach((sc,i)=>{
+    const st=S[i], lt=t-sc.start, root=st.root;
+    const fadeIn=clamp((t-sc.start+0.25)/0.25), fadeOut=i<T.length-1?clamp((T[i+1].start-t)/0.25):1;
+    const vis=(t>=sc.start-0.25 && (i==T.length-1 || t<T[i+1].start)) ? Math.min(fadeIn,fadeOut):0;
+    root.style.opacity=vis;
+    if(t>=sc.start) cur=i;
+    st.items.forEach(([el,at,kind])=>apply(el,kind,(lt-at)/0.55));
+    if(st.ken) st.ken.style.transform=`scale(${1+0.06*clamp(lt/(sc.end-sc.start))})`;
+    (st.fills||[]).forEach(([el,at])=>el.classList.toggle('full',lt>=at));
+    (st.ons||[]).forEach(([el,a,b])=>el.classList.toggle('on',lt>=a&&lt<b+0.0001));
+  });
+  dots.forEach((d,i)=>d.classList.toggle('on',i<=cur));
+  let html='';
+  T.forEach(sc=>sc.chunks.forEach(c=>{if(t>=c.t0&&t<c.t1)html=c.html;}));
+  sub.innerHTML=html; sub.style.display=html?'inline-block':'none';
+};
+window.ready=document.fonts.ready.then(()=>Promise.all([...document.images].map(i=>i.decode().catch(()=>{}))));
+</script></body></html>

@@ -1,0 +1,14 @@
+# 원장님 개인 자료와 만들 때 생기는 파일은 공개 저장소에 올리지 않아요
+*.mp4
+*.mp3
+*.m4a
+*.wav
+*.srt
+**/director-cut*.png
+**/frames/
+**/ov/
+**/tts/
+**/tts_v*/
+timeline.json
+plan.json
+render.js.out
